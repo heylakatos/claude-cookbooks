@@ -1,8 +1,9 @@
+# See https://pre-commit.com/#2-add-a-pre-commit-configuration
 repos:
-  - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: fa1ed65ba95bfa7771a71003a9d74402541f5a5c # v0.14.6 (sha-pinned)
+  - repo: https://github.com/astral-sh/ruff-pre-commit  # The repository mapping tells pre-commit where to get the code for the hook from.
+    rev: fa1ed65ba95bfa7771a71003a9d74402541f5a5c # v0.14.6 (sha-pinned), the revision or tag to clone at.
     hooks:
-      - id: ruff-check
+      - id: ruff-check #ruff-check和ruff-format均定义在对应repo的.pre-commit-hooks.yaml里(https://github.com/astral-sh/ruff-pre-commit/blob/main/.pre-commit-hooks.yaml)
         types_or: [python, pyi, jupyter]
         args: ['--fix']
       - id: ruff-format
@@ -10,7 +11,7 @@ repos:
 
   - repo: local
     hooks:
-      - id: validate-notebooks
+      - id: validate-notebooks #  repo: local时, hook id可以自命名
         name: Validate notebook structure
         entry: uv run python scripts/validate_notebooks.py
         language: system
