@@ -1,4 +1,14 @@
-def basic_summarize(text):
+"""Prompt functions for the promptfoo eval.
+
+promptfoo calls each function with a single context dict; the test case vars
+live under context["vars"]. See
+https://www.promptfoo.dev/docs/configuration/prompts/#python-prompt-functions
+"""
+
+
+# See https://www.promptfoo.dev/docs/configuration/prompts/#python-functions
+def basic_summarize(context):
+    text = context["vars"]["input"]
     prompt = f"""
     You are a legal analyst known for highly accurate and detailed summaries of legal documents.
     Summarize the following text in bullet points. Focus on the main ideas and key details:
@@ -11,7 +21,8 @@ def basic_summarize(text):
     return prompt
 
 
-def guided_legal_summary(text):
+def guided_legal_summary(context):
+    text = context["vars"]["input"]
     prompt = f"""
     You are a legal analyst known for highly accurate and detailed summaries of legal documents.
 
@@ -35,7 +46,8 @@ def guided_legal_summary(text):
     return prompt
 
 
-def summarize_long_document(text):
+def summarize_long_document(context):
+    text = context["vars"]["input"]
     prompt = f"""
     You are a legal analyst specializing in real estate law, known for highly accurate and detailed summaries of sublease agreements.
 
