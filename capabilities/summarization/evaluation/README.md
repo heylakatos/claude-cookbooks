@@ -50,7 +50,9 @@ Tests:
 - These tests specify the inputs and expected outputs for our evaluations.
 - Promptfoo offers various built-in test types (see docs), or you can define your own. We have 3 custom evaluations and 1 out of the box (contains method):
     - `bleu_eval.py`: Implements the BLEU (Bilingual Evaluation Understudy) score, which measures the similarity between machine-generated text and reference texts.
+        + BLEU (Bilingual Evaluation Understudy) = 双语评估替补
     - `rouge_eval.py`: Implements the ROUGE (Recall-Oriented Understudy for Gisting Evaluation) score, which assesses the quality of summarization by comparing it to reference summaries.
+        + ROUGE (Recall-Oriented Understudy for Gisting Evaluation = 面向召回率的摘要评估替补
     - `llm_eval.py`: Contains custom evaluation metrics that leverage Language Models to assess various aspects of generated text, such as coherence, relevance, or factual accuracy.
 
 Output:

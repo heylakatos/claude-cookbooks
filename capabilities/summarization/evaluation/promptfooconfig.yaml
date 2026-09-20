@@ -1,13 +1,17 @@
+# See https://www.promptfoo.dev/docs/configuration/reference/
 description: 'Summarization Evaluation'
-
+# See https://www.promptfoo.dev/docs/configuration/prompts/#python-functions
 prompts:
   - prompts.py:basic_summarize
   - prompts.py:guided_legal_summary
   - prompts.py:summarize_long_document
-
+# See https://www.promptfoo.dev/docs/configuration/reference/#provideroptions
 providers:
+  # id 格式是 <provider>:<endpoint>:<model>
+  # 要查某个 provider 支持哪些写法，去 https://www.promptfoo.dev/docs/providers/ 找对应的页面，每页开头都会列出它接受的 id 格式
   - id: anthropic:messages:claude-haiku-4-5
     label: "3.0 Haiku"
+    # See https://www.promptfoo.dev/docs/providers/anthropic/#supported-parameters
     config:
       max_tokens: 4096
       temperature: 0
@@ -16,16 +20,17 @@ providers:
     config:
       max_tokens: 4096
       temperature: 0
-
 defaultTest:
+  # See https://www.promptfoo.dev/docs/configuration/reference/#test-case
   assert:
+    # See https://www.promptfoo.dev/docs/configuration/expected-outputs/deterministic/#contains-any
     - type: not-contains-any
       value: 
         - "I am an AI"
         - "As an AI language model"
         - "I'm an AI assistant"
         - "I am a chatbot"
-
+# See https://www.promptfoo.dev/docs/configuration/test-cases/#external-test-files
 tests: tests.yaml
 
 outputPath: ../data/results.csv

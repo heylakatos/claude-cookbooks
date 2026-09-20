@@ -1,7 +1,11 @@
+# See https://www.promptfoo.dev/docs/configuration/reference/#test-case
 - vars:
+    # input：待测的租约原文，填进 prompts.py 的模板后发给模型，让它生成摘要。
     input: file://../data/sample-lease1.txt
+    # ground_truth：人工准备的参考摘要，供 ROUGE、BLEU、LLM 评分拿模型输出与之比对打分。
     ground_truth: file://../data/sample-lease1-summary.txt
   assert:
+    # See https://www.promptfoo.dev/docs/configuration/expected-outputs/#assertion-types
     - type: icontains-all
       value:
         - 'parties involved'

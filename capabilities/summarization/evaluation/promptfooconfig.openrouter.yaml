@@ -1,0 +1,51 @@
+# Full eval (all 9 test cases from tests.yaml), routed through OpenRouter.
+#   npx promptfoo@0.123.1 eval -c promptfooconfig.openrouter.yaml --env-file ../../../.env
+# Run only the first test case (6 combinations) with the following command:
+#   npx promptfoo@0.123.1 eval -c promptfooconfig.openrouter.yaml --env-file ../../../.env --filter-first-n 1
+#
+# Cost: 3 prompts x 2 models x 9 documents = 54 summarization calls, plus one
+# llm_eval grading call per result. Roughly 1.3M input tokens end to end.
+# To trim it, comment out a provider or a prompt below.
+description: 'Summarization Evaluation (OpenRouter)'
+
+env:
+  # Python assertions run under the project venv (rouge_score, nltk live there).
+  PROMPTFOO_PYTHON: ../../../.venv/bin/python
+  # Let print() from the assertion scripts reach the terminal.
+  PROMPTFOO_PYTHON_DEBUG_ENABLED: '1'
+
+prompts:
+  - prompts.py:basic_summarize
+  - prompts.py:guided_legal_summary
+  - prompts.py:summarize_long_document
+
+providers:
+  # OpenRouter model slugs: anthropic/claude-<variant>-<version>, dots not dashes.
+  # See https://www.promptfoo.dev/docs/providers/openrouter/
+  - id: openrouter:anthropic/claude-haiku-4.5
+    label: haiku-4.5
+    config:
+      max_tokens: 4096
+      temperature: 0
+  # Sonnet 4.6 and later reject assistant message prefill, which llm_eval.py
+  # still relies on - keep the grader and this provider on 4.5 until that is fixed.
+  - id: openrouter:anthropic/claude-sonnet-4.5
+    label: sonnet-4.5
+    config:
+      max_tokens: 4096
+      temperature: 0
+
+defaultTest:
+  assert:
+    - type: not-contains-any
+      value:
+        - 'I am an AI'
+        - 'As an AI language model'
+        - "I'm an AI assistant"
+        - 'I am a chatbot'
+
+tests: tests.yaml
+
+outputPath: ../data/results.openrouter.csv
+
+evaluateOptions.showProgressBar: true
