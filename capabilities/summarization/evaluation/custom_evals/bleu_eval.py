@@ -6,12 +6,12 @@ from nltk.tokenize import word_tokenize
 from nltk.translate.bleu_score import sentence_bleu
 
 # Download required NLTK data
-nltk.download("punkt", quiet=True)
+nltk.download("punkt_tab", quiet=True)
 
 
 def nltk_bleu_eval(output, ground_truth) -> float:
     """
-    Calculate BLEU score using NLTK and evaluate against a threshold.
+    Calculate BLEU score using NLTK(Natural Language Toolkit) and evaluate against a threshold.
 
     Args:
     output (str): The output to evaluate.
@@ -28,9 +28,14 @@ def nltk_bleu_eval(output, ground_truth) -> float:
     try:
         # Calculate BLEU score
         # Note: sentence_bleu expects a list of references, so we wrap reference_tokens in a list
+
+        # sentence_bleu(references, hypothesis, weights)：第一个参数是参考答案列表（可以有多个标准答案，所以要套一层方括号），第二个是模型输出的词元
+        # weights=(0.25, 0.25, 0.25, 0.25): 一元组到四元组这四档，各占 25% 的权重，最后取几何平均(n 个数相乘后开 n 次方)
         bleu_score = sentence_bleu(
             [ground_truth_tokens], output_tokens, weights=(0.25, 0.25, 0.25, 0.25)
         )
+
+        print(f"👍 bleu: {bleu_score:.3f}")
 
         # Ensure bleu_score is a float
         if isinstance(bleu_score, (int, float)):

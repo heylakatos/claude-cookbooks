@@ -3,6 +3,9 @@ import os
 from typing import Any
 
 import anthropic
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 def llm_eval(summary, input):
@@ -16,7 +19,10 @@ def llm_eval(summary, input):
     Returns:
     bool: True if the average score is above the threshold, False otherwise.
     """
-    client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
+    client = anthropic.Anthropic(
+        base_url=os.environ["OPENROUTER_BASE_URL"],
+        api_key=os.environ["OPENROUTER_API_KEY"],
+    )
 
     # You could include an example here too and likely improve performance further!
     prompt = f"""Evaluate the following summary based on these criteria:
@@ -55,7 +61,7 @@ def llm_eval(summary, input):
     Evaluation (JSON format):"""
 
     response = client.messages.create(
-        model="claude-sonnet-4-6",
+        model="anthropic/claude-sonnet-4.5",
         max_tokens=1000,
         temperature=0,
         messages=[{"role": "user", "content": prompt}, {"role": "assistant", "content": "<json>"}],
@@ -63,6 +69,7 @@ def llm_eval(summary, input):
     )
 
     evaluation = json.loads(response.content[0].text)
+    print("👍 llm: " + " ".join(f"{k}={v}" for k, v in evaluation.items() if k != "explanation"))
     # Filter out non-numeric values and calculate the average
     numeric_values = [value for key, value in evaluation.items() if isinstance(value, (int, float))]
     avg_score = sum(numeric_values) / len(numeric_values)
